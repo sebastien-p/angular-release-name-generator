@@ -48,6 +48,6 @@ fetchReleaseName()
   .then(([name, gif]) => {
     const version = _.random(6, 999);
     console.log('Release name: Angular ' + version + ' - ' + name);
-    console.log(gif.url);
+    console.log(_.get(gif, 'url') || 'No gif found 😟');
   })
   .catch(() => console.error('Oops something went wrong, try again...'));
