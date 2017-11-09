@@ -2,7 +2,7 @@
   "name": "angular-release-name-generator",
   "version": "1.0.0",
   "description": "Generate random Angular release names",
-  "main": "./angular-release-name-generator.js",
+  "main": "./lib.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -16,7 +16,7 @@
   "license": "MIT",
   "preferGlobal": true,
   "bin": {
-    "arng": "./angular-release-name-generator.js"
+    "arng": "./cli.js"
   },
   "bugs": {
     "url": "https://github.com/sebastien-p/angular-release-name-generator/issues"

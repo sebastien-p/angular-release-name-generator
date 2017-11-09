@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 const { sample, random, startCase } = require('lodash');
 const datamuse = require('datamuse');
 const giphy = require('giphy-api')('dc6zaTOxFJmzC');
@@ -18,7 +16,7 @@ function fetchRandomWordOfType(type, fallback) {
   return fetchRandomWordsOfType(type).then(words => sample(words) || fallback);
 }
 
-function fetchRelatedGif(releaseName, fallback) {
+function fetchRelatedGif(releaseName, fallback = 'No gif found...') {
   return giphy.search({ q: releaseName, limit: 1 })
     .then(results => results.data[0])
     .then(gif => (gif && gif.url) || fallback)
@@ -32,11 +30,9 @@ function fetchReleaseName() {
   ]).then(values => values.map(startCase).join(' '));
 }
 
-fetchReleaseName()
-  .then(name => Promise.all([name, fetchRelatedGif(name, 'No gif found 😟')]))
-  .then(([name, gif]) => {
-    const version = random(6, 99);
-    console.log('Release name: Angular ' + version + ' - ' + name);
-    console.log(gif);
-  })
-  .catch(err => console.error('Oops something went wrong, try again...', err));
+module.exports = function angularReleaseNameGenerator(fromVersion = 1) {
+  return fetchReleaseName()
+    .then(name => Promise.all([name, fetchRelatedGif(name)]))
+    .then(([name, gif]) => ({ version: random(fromVersion, 99), name, gif }))
+    .catch(() => { throw new Error('Something went wrong, try again...'); });
+};
