@@ -25,7 +25,7 @@ function fetchRelatedGif(releaseName) {
 
 function fetchRandomWordsOfType(type, fallback) {
   return fetchWordsStartingWith(getRandomLetter())
-    .then(data => data.filter(({ tags = [] } = item) => tags.includes(type)))
+    .then(data => data.filter(({ tags = [] }) => tags.includes(type)))
     .then(data => data.map(item => item.word))
     .then(data => (data.length ? data : [fallback]));
 }
@@ -44,15 +44,10 @@ function fetchReleaseName() {
 }
 
 fetchReleaseName()
-  .then(name => fetchRelatedGif(name)
-    .then(gif => ({
-      name: name,
-      gif: gif.url
-    }))
-  )
-  .then(data => {
+  .then(name => Promise.all([name, fetchRelatedGif(name)]))
+  .then(([name, gif]) => {
     const version = _.random(6, 999);
-    console.log('Release name: Angular ' + version + ' - ' + data.name);
-    console.log(data.gif);
+    console.log('Release name: Angular ' + version + ' - ' + name);
+    console.log(gif.url);
   })
   .catch(() => console.error('Oops something went wrong, try again...'));
