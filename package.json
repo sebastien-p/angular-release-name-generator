@@ -16,7 +16,7 @@
   "license": "MIT",
   "preferGlobal": true,
   "bin": {
-    "ng-ver": "./angular-release-name-generator.js"
+    "arng": "./angular-release-name-generator.js"
   },
   "bugs": {
     "url": "https://github.com/sebastien-p/angular-release-name-generator/issues"

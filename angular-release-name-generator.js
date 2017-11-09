@@ -1,50 +1,42 @@
 #!/usr/bin/env node
 
-const _ = require('lodash');
+const { sample, random, startCase } = require('lodash');
 const datamuse = require('datamuse');
 const giphy = require('giphy-api')('dc6zaTOxFJmzC');
 
-const alphabet = 'abcdefghijklmnopqrstuvwxyz';
-
 function fetchWordsStartingWith(letter) {
-  return datamuse.words({
-    sp: letter + '*',
-    max: 1000,
-    md: 'p'
-  });
+  return datamuse.words({ sp: letter + '*', max: 1000, md: 'p' });
 }
 
-function fetchRelatedGif(releaseName) {
-  return giphy
-    .search({ q: releaseName, limit: 1 })
-    .then(data => _.first(data.data));
-}
-
-function fetchRandomWordsOfType(type, fallback) {
-  return fetchWordsStartingWith(_.sample(alphabet))
+function fetchRandomWordsOfType(type) {
+  return fetchWordsStartingWith(sample('abcdefghijklmnopqrstuvwxyz'))
     .then(data => data.filter(({ tags = [] }) => tags.includes(type)))
-    .then(data => data.map(item => item.word))
-    .then(data => (data.length ? data : [fallback]));
+    .then(data => data.map(item => item.word));
 }
 
 function fetchRandomWordOfType(type, fallback) {
-  return fetchRandomWordsOfType(type, fallback).then(
-    words => words[_.sample(words)]
-  );
+  return fetchRandomWordsOfType(type).then(words => sample(words) || fallback);
+}
+
+function fetchRelatedGif(releaseName, fallback) {
+  return giphy.search({ q: releaseName, limit: 1 })
+    .then(results => results.data[0])
+    .then(gif => (gif && gif.url) || fallback)
+    .catch(() => fallback);
 }
 
 function fetchReleaseName() {
   return Promise.all([
     fetchRandomWordOfType('adj', 'angular'),
     fetchRandomWordOfType('n', 'next')
-  ]).then(values => values.map(_.startCase).join(' '));
+  ]).then(values => values.map(startCase).join(' '));
 }
 
 fetchReleaseName()
-  .then(name => Promise.all([name, fetchRelatedGif(name)]))
+  .then(name => Promise.all([name, fetchRelatedGif(name, 'No gif found 😟')]))
   .then(([name, gif]) => {
-    const version = _.random(6, 999);
+    const version = random(6, 99);
     console.log('Release name: Angular ' + version + ' - ' + name);
-    console.log(_.get(gif, 'url') || 'No gif found 😟');
+    console.log(gif);
   })
-  .catch(() => console.error('Oops something went wrong, try again...'));
+  .catch(err => console.error('Oops something went wrong, try again...', err));
