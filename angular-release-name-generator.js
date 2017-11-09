@@ -1,62 +1,42 @@
-const get = require('https').get;
-const stringify = require('querystring').stringify;
+#!/usr/bin/env node
 
-function getRandomNumber(min, max) {
-  return Math.floor(Math.random() * (max - min) + min);
+const { sample, random, startCase } = require('lodash');
+const datamuse = require('datamuse');
+const giphy = require('giphy-api')('dc6zaTOxFJmzC');
+
+function fetchWordsStartingWith(letter) {
+  return datamuse.words({ sp: letter + '*', max: 1000, md: 'p' });
 }
 
-function getRandomLetter() {
-  const min = 65; // a.
-  const max = min + 26;
-  return String.fromCharCode(getRandomNumber(min, max));
-}
-
-function capitalize(string) {
-  return string[0].toUpperCase() + string.slice(1);
-}
-
-function fetch(url) {
-  return new Promise((resolve, reject) => get(url, response => {
-    if (response.statusCode !== 200) { return reject(); }
-    let data = '';
-    response.setEncoding('utf8');
-    response.on('data', chunk => data += chunk);
-    response.on('end', () => resolve(JSON.parse(data)));
-  }));
-}
-
-function fetchWordsDataStartingWith(letter) {
-  // See http://www.datamuse.com/api/.
-  return fetch('https://api.datamuse.com/words?' + stringify({
-    sp: letter + '*',
-    max: 1000,
-    md: 'p'
-  }));
-}
-
-function fetchRandomWordsOfType(type, fallback) {
-  return fetchWordsDataStartingWith(getRandomLetter())
-    .then(data => data.filter(({ tags = [] } = item) => tags.includes(type)))
-    .then(data => data.length ? data : [{ word: fallback }])
+function fetchRandomWordsOfType(type) {
+  return fetchWordsStartingWith(sample('abcdefghijklmnopqrstuvwxyz'))
+    .then(data => data.filter(({ tags = [] }) => tags.includes(type)))
     .then(data => data.map(item => item.word));
 }
 
 function fetchRandomWordOfType(type, fallback) {
-  return fetchRandomWordsOfType(type, fallback)
-    .then(words => words[getRandomNumber(0, words.length)]);
+  return fetchRandomWordsOfType(type).then(words => sample(words) || fallback);
+}
+
+function fetchRelatedGif(releaseName, fallback) {
+  return giphy.search({ q: releaseName, limit: 1 })
+    .then(results => results.data[0])
+    .then(gif => (gif && gif.url) || fallback)
+    .catch(() => fallback);
 }
 
 function fetchReleaseName() {
   return Promise.all([
     fetchRandomWordOfType('adj', 'angular'),
     fetchRandomWordOfType('n', 'next')
-  ])
-    .then(values => values.map(capitalize).join(' '));
+  ]).then(values => values.map(startCase).join(' '));
 }
 
 fetchReleaseName()
-  .then(name => {
-    const version = getRandomNumber(6, 999);
+  .then(name => Promise.all([name, fetchRelatedGif(name, 'No gif found 😟')]))
+  .then(([name, gif]) => {
+    const version = random(6, 99);
     console.log('Release name: Angular ' + version + ' - ' + name);
+    console.log(gif);
   })
-  .catch(() => console.error('Oops something went wrong, try again...'));
+  .catch(err => console.error('Oops something went wrong, try again...', err));

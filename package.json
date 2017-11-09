@@ -1,0 +1,30 @@
+{
+  "name": "angular-release-name-generator",
+  "version": "1.0.0",
+  "description": "Generate random Angular release names",
+  "main": "./angular-release-name-generator.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sebastien-p/angular-release-name-generator.git"
+  },
+  "keywords": ["angular"],
+  "author": "https://github.com/sebastien-p",
+  "contributors": ["https://github.com/known-as-bmf"],
+  "license": "MIT",
+  "preferGlobal": true,
+  "bin": {
+    "arng": "./angular-release-name-generator.js"
+  },
+  "bugs": {
+    "url": "https://github.com/sebastien-p/angular-release-name-generator/issues"
+  },
+  "homepage": "https://github.com/sebastien-p/angular-release-name-generator#readme",
+  "dependencies": {
+    "datamuse": "1.0.5",
+    "giphy-api": "1.2.7",
+    "lodash": "4.17.4"
+  }
+}
