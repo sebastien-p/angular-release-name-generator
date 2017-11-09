@@ -6,16 +6,11 @@ const giphy = require('giphy-api')('dc6zaTOxFJmzC');
 
 const alphabet = 'abcdefghijklmnopqrstuvwxyz';
 
-function getRandomLetter() {
-  return alphabet[_.random(0, alphabet.length)];
-}
-
 function fetchWordsStartingWith(letter) {
   return datamuse.words({
     sp: letter + '*',
     max: 1000,
-    md: 'p',
-    topics: 'computer,food,drink'
+    md: 'p'
   });
 }
 
@@ -26,7 +21,7 @@ function fetchRelatedGif(releaseName) {
 }
 
 function fetchRandomWordsOfType(type, fallback) {
-  return fetchWordsStartingWith(getRandomLetter())
+  return fetchWordsStartingWith(_.sample(alphabet))
     .then(data => data.filter(({ tags = [] }) => tags.includes(type)))
     .then(data => data.map(item => item.word))
     .then(data => (data.length ? data : [fallback]));
@@ -34,7 +29,7 @@ function fetchRandomWordsOfType(type, fallback) {
 
 function fetchRandomWordOfType(type, fallback) {
   return fetchRandomWordsOfType(type, fallback).then(
-    words => words[_.random(0, words.length)]
+    words => words[_.sample(words)]
   );
 }
 
@@ -42,7 +37,7 @@ function fetchReleaseName() {
   return Promise.all([
     fetchRandomWordOfType('adj', 'angular'),
     fetchRandomWordOfType('n', 'next')
-  ]).then(values => values.map(_.capitalize).join(' '));
+  ]).then(values => values.map(_.startCase).join(' '));
 }
 
 fetchReleaseName()
