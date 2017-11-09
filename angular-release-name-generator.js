@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const _ = require('lodash');
 const datamuse = require('datamuse');
 const giphy = require('giphy-api')('dc6zaTOxFJmzC');
