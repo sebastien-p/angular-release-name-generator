@@ -6,7 +6,7 @@ Generate random release names for Angular.
 
 ```bash
 $ npm install --global angular-release-name-generator
-$ nrng
+$ arng
 ```
 
 ## Result
