@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 
-require('./lib')(6)
+const angularReleaseNameGenerator = require('./lib');
+
+angularReleaseNameGenerator()
   .then(({ version, name, gif }) => {
     console.log('Release name: Angular ' + version + ' - ' + name);
     console.log(gif);
