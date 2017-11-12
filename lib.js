@@ -50,7 +50,7 @@ function fetchRelatedData(name, version) {
   return Promise.all([name, version, fetchTopicRelatedGifUrl(name)]);
 }
 
-module.exports = function arng(version = fetchNextVersion()) {
+module.exports = function releaseNameGenerator(version = fetchNextVersion()) {
   return fetchReleaseName()
     .then(name => fetchRelatedData(name, version))
     .then(([name, version, gif]) => ({ name, version, gif }))

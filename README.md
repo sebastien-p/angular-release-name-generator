@@ -12,8 +12,11 @@ $ arng
 ## Result
 
 ```
-Release name: Angular 14 - Accurate Manchet
+----------
+Angular 14 - Accurate Manchet
 https://giphy.com/gifs/accurate-ySg4bO4O02YyA
+----------
+Copied to clipboard
 ```
 
 ## Lib
@@ -30,9 +33,8 @@ For the lol. Enjoy!
 
 ## Todo
 
-* Copy to clipboard
-* Website
 * Slack command
+* Website
 * ...
 
 ## License
