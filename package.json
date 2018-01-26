@@ -1,7 +1,7 @@
 {
   "name": "angular-release-name-generator",
   "description": "Generate random Angular release names",
-  "version": "1.2.1",
+  "version": "1.3.1",
   "license": "MIT",
   "author": "https://github.com/sebastien-p",
   "contributors": ["https://github.com/known-as-bmf"],
