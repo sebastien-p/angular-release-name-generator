@@ -25,11 +25,11 @@
   },
   "dependencies": {
     "chalk": "2.3.0",
-    "clipboardy": "1.2.1",
+    "clipboardy": "1.2.2",
     "datamuse": "1.0.5",
     "giphy-api": "1.2.7",
     "lodash": "4.17.4",
-    "semver": "5.4.1"
+    "semver": "5.5.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
