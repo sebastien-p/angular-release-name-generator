@@ -1,6 +1,9 @@
 export = releaseNameGenerator;
 
-declare function releaseNameGenerator(version?: number): Promise<releaseNameGenerator.IRelease>;
+declare function releaseNameGenerator(
+  major?: number | Promise<number>,
+  gif?: string | Promise<string>
+): Promise<releaseNameGenerator.IRelease>;
 
 declare namespace releaseNameGenerator {
   export interface IRelease {
