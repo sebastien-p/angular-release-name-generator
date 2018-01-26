@@ -22,6 +22,12 @@ Copied to clipboard
 ## Lib
 
 ```js
+/**
+ * Generate random release names for Angular.
+ * @param {number|Promise<number>} [major=fetchNextMajor(...)] - SemVer major.
+ * @param {string|Promise<string>} [gif=fetchTopicRelatedGifUrl(...)] - Gif URL.
+ * @returns {Promise<releaseNameGenerator.IRelease>}
+ */
 require('angular-release-name-generator')()
   .then(({ version, name, gif }) => console.log(version, name, gif))
   .catch(error => console.error(error));
